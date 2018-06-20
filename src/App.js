@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import '@microfocus/ux-ias/dist/ux-ias.css'
 import Button from './Button';
-import {Input} from './Input';
+import Input from './Input';
 
 export class App extends React.Component {
     constructor(props) {
