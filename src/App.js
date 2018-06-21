@@ -1,8 +1,10 @@
 import React from 'react';
 import './App.css';
 import '@microfocus/ux-ias/dist/ux-ias.css'
+import '@microfocus/ias-icons/dist/ias-icons.css'
 import Button from './Button';
 import Input from './Input';
+import SymptomList from "./symptoms/SymptomList";
 
 export class App extends React.Component {
     constructor(props) {
@@ -30,8 +32,11 @@ export class App extends React.Component {
         return (
             <div>
                 <h2>Hello {username}!</h2>
-                <Button handleClick={this.resetName.bind(this)} title='Reset Name'></Button>
+                <Button handleClick={this.resetName.bind(this)} title='Reset Name'/>
                 <Input id='name' handleChange={this.setName.bind(this)} label='Name' value={username}/>
+
+                <br/>
+                <SymptomList />
             </div>
         )
     }
