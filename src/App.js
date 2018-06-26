@@ -2,42 +2,17 @@ import React from 'react';
 import './App.css';
 import '@microfocus/ux-ias/dist/ux-ias.css'
 import '@microfocus/ias-icons/dist/ias-icons.css'
-import Button from './Button';
-import Input from './Input';
-import SymptomList from "./symptoms/SymptomList";
+import {ConnectedForm} from './Form';
+import {ConnectedToggleButton} from './ToggleButton';
 
 export class App extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            username: 'Joseph White'
-        };
-    }
-
-    setName(e) {
-        this.setState({
-            username: e.target.value
-        });
-    }
-
-    resetName() {
-        this.setState({
-            username: 'Default User'
-        });
-    }
-
     render() {
-        const {username} = this.state;
-        return (
-            <div>
-                <h2>Hello {username}!</h2>
-                <Button handleClick={this.resetName.bind(this)} title='Reset Name'/>
-                <Input id='name' handleChange={this.setName.bind(this)} label='Name' value={username}/>
 
-                <br/>
-                <SymptomList />
-            </div>
-        )
+        return (
+            <React.Fragment>
+                <ConnectedToggleButton />
+                <ConnectedForm />
+            </React.Fragment>
+        );
     }
 }

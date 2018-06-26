@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "lolcatjs": "^2.3.1",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "react-scripts": "1.1.4"
@@ -17,6 +16,8 @@
   "devDependencies": {
     "@microfocus/ias-icons": "1.0.0",
     "@microfocus/ux-ias": "1.0.0-alpha.1",
+    "react-redux": "5.0.7",
+    "redux": "4.0.0",
     "uuid": "3.2.1"
   }
 }
