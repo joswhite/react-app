@@ -1,16 +1,17 @@
 import uuid from 'uuid/v1'
 import React from 'react';
+import {connect} from 'react-redux';
 
-export default class SymptomList extends React.Component {
+export class TodoList extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             symptoms: [
-                new SymptomData('Cold hands'),
-                new SymptomData('Itching nose'),
-                new SymptomData('Stomach pain'),
-                new SymptomData('', true)
+                new TodoData('Cold hands'),
+                new TodoData('Itching nose'),
+                new TodoData('Stomach pain'),
+                new TodoData('', true)
             ]
         };
     }
@@ -27,7 +28,7 @@ export default class SymptomList extends React.Component {
         const index = newSymptoms.findIndex((item) => symptomData.equals(item));
         newSymptoms.splice(index, 1, symptomData.changeName(name));
         if (index === newSymptoms.length - 1) {
-            newSymptoms = newSymptoms.concat([ new SymptomData('', true) ]);
+            newSymptoms = newSymptoms.concat([ new TodoData('', true) ]);
         }
         this.setState({ symptoms: newSymptoms });
     }
@@ -36,16 +37,19 @@ export default class SymptomList extends React.Component {
         const {symptoms} = this.state;
         const symptomElements = symptoms.map(
             (symptom) =>
-                <Symptom handleDelete={this.handleDelete.bind(this)}
+                <Todo handleDelete={this.handleDelete.bind(this)}
                          handleUpdate={this.handleUpdate.bind(this)}
                          key={symptom.getId()}
                          symptom={symptom}/>
         );
-        return <div>{symptomElements}</div>;
+        return (<React.Fragment>
+            <div>{symptomElements}</div>
+            <div>Email: {this.props.email}</div>
+        </React.Fragment>);
     }
 }
 
-class Symptom extends React.Component {
+class Todo extends React.Component {
     constructor(props) {
         super(props);
 
@@ -73,42 +77,47 @@ class Symptom extends React.Component {
         const {editing} = this.state;
         const {symptom} = this.props;
 
-        const placeholder = symptom.empty ? 'Create New' : 'Edit Symptom';
-        const symptomLabel = editing ? (
-            <div className='ias-input-container'>
-                <input id={symptom.id + '-input'} onChange={this.onUpdate.bind(this)} type='text' placeholder={placeholder} value={symptom.name}/>
-            </div>
-        ) : (
-            <span>{symptom.name}</span>
-        );
-
-        let options = editing ? (
-            <button className="ias-button ias-icon-button" onClick={this.toggleEdit.bind(this)} type="button">
-                <i className="ias-icon ias-icon-check_thin" />
-            </button>
-        ) : (
-            <button className="ias-button ias-icon-button" onClick={this.toggleEdit.bind(this)} type="button">
-                <i className="ias-icon ias-icon-edit_thick" />
-            </button>
-        );
-
         let deleteOption = symptom.empty ? null : (
             <button className="ias-button ias-icon-button" onClick={this.onDelete.bind(this)} type="button">
                 <i className="ias-icon ias-icon-delete_thin" />
             </button>
         );
 
-        return (
-            <div>
-                {symptomLabel}
-                {options}
+        let options = editing ? (
+            <React.Fragment>
+                <button className="ias-button ias-icon-button" onClick={this.toggleEdit.bind(this)} type="button">
+                    <i className="ias-icon ias-icon-check_thin" />
+                </button>
                 {deleteOption}
+            </React.Fragment>
+        ) : (
+            <React.Fragment>
+                <button className="ias-button ias-icon-button" onClick={this.toggleEdit.bind(this)} type="button">
+                    <i className="ias-icon ias-icon-edit_thick" />
+                </button>
+                {deleteOption}
+            </React.Fragment>
+
+        );
+
+        const placeholder = symptom.empty ? 'Create New' : 'Edit Todo';
+        const symptomTag = editing ? (
+            <div className='ias-input-container'>
+                <input id={symptom.id + '-input'} onChange={this.onUpdate.bind(this)} type='text' placeholder={placeholder} value={symptom.name}/>
+                {options}
             </div>
-        )
+        ) : (
+            <div>
+                <span>{symptom.name}</span>
+                {options}
+            </div>
+        );
+
+        return symptomTag;
     }
 }
 
-class SymptomData {
+class TodoData {
     constructor(name, empty, id) {
         this._id = id || uuid();
         this.name = name || '';
@@ -119,7 +128,7 @@ class SymptomData {
         this.name = name;
         this.empty = false;
         return this;
-        // return new SymptomData(name, false, this._id);
+        // return new TodoData(name, false, this._id);
     }
 
     equals(symptomData) {
@@ -130,3 +139,7 @@ class SymptomData {
         return this._id;
     }
 }
+
+const mapStateToProps = ({ email }) => ({ email });
+
+export const ConnectedTodoList = connect(mapStateToProps)(TodoList);
