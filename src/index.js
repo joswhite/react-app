@@ -9,40 +9,59 @@ import registerServiceWorker from './registerServiceWorker';
 import uuid from 'uuid/v1';
 
 const initialState = {
-    email: 'j@elena.com',
     todos: [
-        { id: uuid(), name: 'Check work email', completed: false },
-        { id: uuid(), name: 'Learn React', completed: false }
-    ]
+        { id: uuid(), name: 'Check work email' },
+        { id: uuid(), name: 'Learn React' }
+    ],
+    /*email: 'j@elena.com'*/
 };
+
+/*todos: {
+    'A': {name: 'Check work email'},
+    'B': {name: 'Learn React'}
+},*/
+
 const store = createStore((state, action) => {
     let index;
     let todos;
     switch (action.type) {
         case NEW_TODO:
-            todos = state.todos.concat({ id: uuid(), name: '', completed: false});
-            return {email: state.email, todos};
+            todos = state.todos.concat({ id: uuid(), name: '', new: true });
+            return {...state, todos};
         case EDIT_TODO:
             todos = [...state.todos];
             index = findTodoIndex(todos, action.todo);
-            if (index) {
-                todos[index].name = action.name;
+            if (index !== -1) {
+                let todo = { id: action.todo.id, name: action.name };
+                todos.splice(index, 1, todo);
             }
-            return {email: state.email, todos};
+            // return {
+            //     ...state,
+            //     todos: {
+            //         ...state.todos,
+            //         [action.todoId]: action.name
+            //     }
+            // }
+            return {...state, todos};
         case DELETE_TODO:
             todos = [...state.todos];
             index = findTodoIndex(todos, action.todo);
-            if (index) {
+            if (index !== -1) {
                 todos.splice(index, 1);
             }
-            return {email: state.email, todos};
+            return {...state, todos};
         default:
             return state;
     }
 }, initialState);
 
 function findTodoIndex(todos, todo) {
-    return 0;
+    for (let index = 0; index < todos.length; index++) {
+        if (todos[index].id === todo.id) {
+            return index;
+        }
+    }
+    return -1;
 }
 
 ReactDOM.render((

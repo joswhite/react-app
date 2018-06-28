@@ -28,5 +28,12 @@
 }
 
 .todo-item {
+  display: inline-block;
+  min-width: 200px;
+  padding: 10px;
   cursor: pointer;
+}
+
+.ias-input-container input {
+  margin-left: 32px;
 }
